@@ -1,0 +1,32 @@
+DROP TABLE FII;
+
+CREATE TABLE FII (
+     CODIGODOFUNDO char(10) not null,
+     SETOR char(50),
+     PRECOATUAL double precision,
+     LIQUIDEZDIARIA double precision,
+     DIVIDENDO double precision,
+     DIVIDENDYIELD double precision,
+     DY3MACUMULADO double precision,
+     DY6MACUMULADO double precision,
+     DY12MACUMULADO double precision,
+     DY3MMEDIA double precision,
+     DY6MMEDIA double precision,
+     DY12MMEDIA double precision,
+     DYANO double precision,
+     VARIACAOPRECO double precision,
+     RENTABPERIODO double precision,
+     RENTABACUMULADA double precision,
+     PATRIMONIOLIQ double precision,
+     VPA double precision,
+     PVPA double precision,
+     DYPATRIMONIAL double precision,
+     VARIACAOPATRIMONIAL double precision,
+     RENTABPATRNOPERIODO double precision,
+     RENTABPATRACUMULADA double precision,
+     VACANCIAFISICA double precision,
+     VACANCIAFINANCEIRA double precision,
+     QUANTIDADEATIVOS integer,
+     CODIGOEXEC char(50) not null,
+     CREATEDAT TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
