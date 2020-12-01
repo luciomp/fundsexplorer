@@ -1,0 +1,16 @@
+{
+    "python.pythonPath": "C:\\Program Files\\Python38\\python.exe",
+    "python.linting.pylintEnabled": false,
+    "python.linting.enabled": true,
+    "python.linting.flake8Enabled": true,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "C1",
+            "group": "G2",
+            "database": "${workspaceFolder:fundsexplorer_git}/database/db.sqlite"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
+}

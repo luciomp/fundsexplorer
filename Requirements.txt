@@ -1,3 +1,10 @@
-selenium
-google-chrome version 86
-ChromeDriver 86.0.4240.22 (https://chromedriver.chromium.org/downloads)
+aiohttp==3.7.3
+async-timeout==3.0.1
+attrs==20.3.0
+chardet==3.0.4
+idna==2.10
+multidict==5.0.2
+selenium==3.141.0
+typing-extensions==3.7.4.3
+urllib3==1.26.2
+yarl==1.6.3
