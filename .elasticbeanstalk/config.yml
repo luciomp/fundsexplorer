@@ -1,2 +1,19 @@
+branch-defaults:
+  main:
+    environment: mb-dev-1
+environment-defaults:
+  mb-dev-1:
+    branch: main
+    repository: origin
 global:
+  application_name: appsp1
+  default_ec2_keyname: keypair1
+  default_platform: Python 3.6 running on 64bit Amazon Linux
+  default_region: sa-east-1
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
   profile: eb-cli
+  sc: git
+  workspace_type: Application
