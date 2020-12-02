@@ -5,9 +5,9 @@ import asyncio
 from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor
 
-EXEC_PATH_LNX = '/usr/bin/chromedriver-86'
+EXEC_PATH_LNX = 'bin/chromedriver-86'
 EXEC_PATH_WIN = r'.\bin\chromedriver.exe'
-SQLITE_DBPATH = r'.\database\db.sqlite'
+SQLITE_DBPATH = r'database/db.sqlite'
 PG_CSTR = r'host=127.0.0.1 dbname=fundsfiidb user=postgres password=postgres'
 CROWLER_PERIOD = 12
 
@@ -40,7 +40,7 @@ class App:
     async def run(self):
         self.db = DatabaseManager(SQLITE_DBPATH)
         self.api_server = HttpServer(self.db)
-        self.crowler = Crowler(EXEC_PATH_WIN)
+        self.crowler = Crowler(EXEC_PATH_LNX)
         await self.api_server.run('0.0.0.0', 8080)
         await self.crowlerTask()
 

@@ -13,6 +13,7 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 ADD . /app
+ADD /usr/bin/chromedriver-86 /app/bin/
 RUN python -m pip install -r /app/requirements.txt
 
 # Switching to a non-root user, please refer to https://aka.ms/vscode-docker-python-user-rights
