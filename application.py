@@ -5,7 +5,7 @@ import asyncio
 from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor
 
-EXEC_PATH_LNX = r'bin/chromedriver'
+EXEC_PATH_LNX = r'/app/bin/chromedriver'
 EXEC_PATH_WIN = r'.\bin\chromedriver.exe'
 SQLITE_DBPATH = r'database/db.sqlite'
 PG_CSTR = r'host=127.0.0.1 dbname=fundsfiidb user=postgres password=postgres'

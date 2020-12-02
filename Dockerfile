@@ -13,7 +13,9 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 ADD . /app
+RUN ls /app
 RUN python -m pip install -r /app/requirements.txt
+RUN yum install /app/bin/google-chrome-stable_current_x86_64.rpm
 
 # Switching to a non-root user, please refer to https://aka.ms/vscode-docker-python-user-rights
 RUN useradd appuser && chown -R appuser /app
