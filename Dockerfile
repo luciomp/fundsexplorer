@@ -13,7 +13,9 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 ADD . /app
+ADD bin/ app/
 RUN ls /app
+RUN ls /app/bin
 RUN python -m pip install -r /app/requirements.txt
 RUN yum install /app/bin/google-chrome-stable_current_x86_64.rpm
 
