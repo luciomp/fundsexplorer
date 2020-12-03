@@ -14,12 +14,10 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 ADD . /app
-RUN ls /app
-RUN ls /app/bin/
 RUN python -m pip install -r /app/requirements.txt
 
 # Install Chrome
-RUN apt-get -y update && apt-get install -y gnupg2
+#RUN apt-get -y update && apt-get install -y gnupg2
 #ADD https://dl-ssl.google.com/linux/linux_signing_key.pub ./chrome_key
 #RUN apt-key add ./chrome_key
 #RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
@@ -33,5 +31,5 @@ USER appuser
 EXPOSE 8080
 
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
-#CMD ["python", "application.py"]
-CMD ["/bin/sh", "-c", "python application.py > /var/log/application.log 2>&1"]
+CMD ["python", "application.py"]
+#CMD ["/bin/sh", "-c", "python application.py > /var/log/application.log 2>&1"]
