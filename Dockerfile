@@ -33,4 +33,5 @@ USER appuser
 EXPOSE 8080
 
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
-CMD ["python", "application.py"]
+#CMD ["python", "application.py"]
+CMD ["/bin/sh", "-c", "python application.py > /var/log/application.log 2>&1"]
