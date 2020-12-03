@@ -1,6 +1,6 @@
 # For more information, please refer to https://aka.ms/vscode-docker-python
-FROM python:3.8-slim-buster
-#FROM selenium/standalone-chrome
+#FROM python:3.8-slim-buster
+FROM jameswilliams1/python-webdriver:3.8-slim-buster-chrome
 
 # Keeps Python from generating .pyc files in the container
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -24,7 +24,7 @@ RUN apt-get -y update && apt-get install -y gnupg2
 #RUN apt-key add ./chrome_key
 #RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
 #RUN apt-get install -y google-chrome-stable
-RUN apt install -y /app/bin/google-chrome-stable_current_amd64.deb
+#RUN apt install -y /app/bin/google-chrome-stable_current_amd64.deb
 
 # Switching to a non-root user, please refer to https://aka.ms/vscode-docker-python-user-rights
 RUN useradd appuser && chown -R appuser /app
