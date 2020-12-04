@@ -5,11 +5,12 @@ import asyncio
 from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor
 
-EXEC_PATH_LNX = r'/usr/local/bin/chromedriver'
-EXEC_PATH_WIN = r'.\bin\chromedriver.exe'
+EXEC_PATH = r'/usr/local/bin/chromedriver'
+# EXEC_PATH = r'.\bin\chromedriver.exe'
 SQLITE_DBPATH = r'database/db.sqlite'
 PG_CSTR = r'host=127.0.0.1 dbname=fundsfiidb user=postgres password=postgres'
 CROWLER_PERIOD = 12
+SLEEP_INTERVAL = 900
 
 
 class App:
@@ -30,7 +31,7 @@ class App:
                     fiis = await loop.run_in_executor(
                         self.crowlerExecutor, self.crowler.get_fiis)
                     self.db.insertFiis(fiis)
-                await asyncio.sleep(60)
+                await asyncio.sleep(SLEEP_INTERVAL)
             except asyncio.CancelledError:
                 print('Crowler task signaled to stop')
                 break
@@ -40,7 +41,7 @@ class App:
     async def run(self):
         self.db = DatabaseManager(SQLITE_DBPATH)
         self.api_server = HttpServer(self.db)
-        self.crowler = Crowler(EXEC_PATH_LNX)
+        self.crowler = Crowler(EXEC_PATH)
         await self.api_server.run('0.0.0.0', 8080)
         await self.crowlerTask()
 

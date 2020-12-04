@@ -14,21 +14,39 @@ class DatabaseManager:
         cur.execute(Fii.genCreateSQL())
         self.conn.commit()
 
-    def insertFiis(self, fiis: list):
-        print('Inserting FIIs')
+    def _cleanFiis(self):
+        print('Cleaning Old Fiis')
         try:
-            # TODO: keep onyl 30 executions
             cur = self.conn.cursor()
-            codexec = datetime.now().isoformat()
-            for fii in fiis:
-                fii['CODIGOEXEC'] = codexec
-                sql = Fii(fii).toSQL()
-                print(f"Inserting fii: {fii['CODIGODOFUNDO']}")
-                cur.execute(sql)
+            cur.execute(f'''DELETE FROM {Fii.__tablename__}
+                WHERE CODIGOEXEC NOT IN (
+                    SELECT distinct(CODIGOEXEC) FROM {Fii.__tablename__}
+                        order by CODIGOEXEC desc
+                        limit 60
+            )''')
+            print(f'Deleted {cur.rowcount} row(s)')
             self.conn.commit()
         except Exception as err:
             print(f'Error: {err}')
             self.conn.rollback()
+
+    def _insertFiis(self, fiis: list):
+        print('Inserting FIIs')
+        try:
+            cur = self.conn.cursor()
+            codexec = datetime.now().isoformat()
+            for fii in fiis:
+                print(f"Inserting fii: {fii['CODIGODOFUNDO']}")
+                fii['CODIGOEXEC'] = codexec
+                cur.execute(Fii(fii).toSQL())
+            self.conn.commit()
+        except Exception as err:
+            print(f'Error: {err}')
+            self.conn.rollback()
+
+    def insertFiis(self, fiis: list):
+        self._cleanFiis()
+        self._insertFiis(fiis)
 
     def getFiis(self):
         print('Getting FIIs')

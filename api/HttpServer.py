@@ -1,5 +1,7 @@
 from aiohttp import web
 
+SECRET = '42399549-e526-48ab-bd46-126f83f04a4c'
+
 
 class HttpServer:
     def __init__(self, dbmng):
@@ -19,11 +21,25 @@ class HttpServer:
 
     async def handle(self, request):
         print(f'request: {request}')
-        if request.method != 'GET':
-            raise web.HTTPMethodNotAllowed()
+        # Only GET method is allowed
+        if request.method != 'GET' and request.method != 'OPTIONS':
+            raise web.HTTPMethodNotAllowed(request.method, ['GET', 'OPTIONS'])
+        # Only fii route is available
         if request.path != '/fii':
             raise web.HTTPNotFound()
-        # TODO: verificar token
+        # OPTIONS response
+        if request.method == 'OPTIONS':
+            return web.json_response(headers = {
+                'Access-Control-Allow-Headers': 'Authorization',
+                'Access-Control-Allow-Origin': '*'
+            })
+        # Authentication is needed
+        if request.headers.get('AUTHORIZATION') is None:
+           raise web.HTTPForbidden()
+        # Assert rigth secret
+        if request.headers.get('AUTHORIZATION') != SECRET:
+           raise web.HTTPUnauthorized()
+        # Ok
         return web.json_response({
             'fiis': self.dbmng.getFiis()
         }, headers={
