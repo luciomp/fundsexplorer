@@ -1,15 +1,26 @@
 from aiohttp import web
-
-SECRET = '42399549-e526-48ab-bd46-126f83f04a4c'
+from .fii import FiiResource
+from .favorite import FavoriteResource
 
 
 class HttpServer:
+    SECRET = '42399549-e526-48ab-bd46-126f83f04a4c'
+    methods = {
+        'POST': 'add',
+        'GET': 'list',
+        'DELETE': 'delete',
+        'PUT': 'updt'
+    }
+
     def __init__(self, dbmng):
         print('Starting HTTP Server')
-        self.dbmng = dbmng
         self.server = None
         self.runner = None
         self.site = None
+        self.resources = {
+            'fii': FiiResource(dbmng),
+            'favorite': FavoriteResource(dbmng)
+        }
 
     async def run(self, h, p):
         print('Runnin HTTP Server')
@@ -19,29 +30,35 @@ class HttpServer:
         self.site = web.TCPSite(self.runner, h, p)
         await self.site.start()
 
+    def call(self, rsc, httpm, request):
+        c = getattr(rsc, HttpServer.methods.get(httpm, 'err'), None)
+        if callable(c):
+            return c(request)
+        else:
+            raise web.HTTPMethodNotAllowed(httpm, ['OPTIONS'])
+
     async def handle(self, request):
-        print(f'request: {request}')
-        # Only GET method is allowed
-        if request.method != 'GET' and request.method != 'OPTIONS':
-            raise web.HTTPMethodNotAllowed(request.method, ['GET', 'OPTIONS'])
-        # Only fii route is available
-        if request.path != '/fii':
+        print(request)
+        params = request.path.split('/')
+        if len(params) < 2 or params[1] not in self.resources:
             raise web.HTTPNotFound()
+
         # OPTIONS response
         if request.method == 'OPTIONS':
-            return web.json_response(headers = {
+            return web.json_response(headers={
                 'Access-Control-Allow-Headers': 'Authorization',
                 'Access-Control-Allow-Origin': '*'
             })
+
         # Authentication is needed
         if request.headers.get('AUTHORIZATION') is None:
-           raise web.HTTPForbidden()
+            raise web.HTTPForbidden()
+
         # Assert rigth secret
-        if request.headers.get('AUTHORIZATION') != SECRET:
-           raise web.HTTPUnauthorized()
-        # Ok
-        return web.json_response({
-            'fiis': self.dbmng.getFiis()
-        }, headers={
-            'Access-Control-Allow-Origin': '*'
-        })
+        if request.headers.get('AUTHORIZATION') != HttpServer.SECRET:
+            raise web.HTTPUnauthorized()
+
+        resp = self.call(self.resources[params[1]], request.method, request)
+        resp.headers['Access-Control-Allow-Origin'] = '*'
+        print(resp)
+        return resp

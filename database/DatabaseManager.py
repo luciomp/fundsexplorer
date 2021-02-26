@@ -1,6 +1,7 @@
 import sqlite3
 from datetime import datetime
 from models.Fii import Fii
+from models.Favorite import Favorite
 
 
 class DatabaseManager:
@@ -12,6 +13,7 @@ class DatabaseManager:
     def checkTable(self):
         cur = self.conn.cursor()
         cur.execute(Fii.genCreateSQL())
+        cur.execute(Favorite.genCreateSQL())
         self.conn.commit()
 
     def _cleanFiis(self):
@@ -55,6 +57,20 @@ class DatabaseManager:
             f'''{Fii.genSelectSQL()} WHERE CODIGOEXEC in (
                 select MAX(CODIGOEXEC) FROM {Fii.__tablename__})'''
         )]
+
+    def insertFavorite(self, deviceid, fii):
+        cur = self.conn.cursor()
+        cur.execute(f"insert into FAVORITE (DEVICEID, CODIGODOFUNDO) values ('{deviceid}', '{fii}')")
+        self.conn.commit()
+
+    def deleteFavorite(self, deviceid, fii):
+        cur = self.conn.cursor()
+        cur.execute(f"delete from FAVORITE where DEVICEID='{deviceid}' and CODIGODOFUNDO='{fii}'")
+        self.conn.commit()
+
+    def getFavorites(self, i: dict):
+        cur = self.conn.cursor()
+        return [i for i in cur.execute('select CODIGODOFUNDO from FAVORITE')]
 
     def getLastExecution(self):
         print('Getting Last Execution')

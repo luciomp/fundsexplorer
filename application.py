@@ -31,12 +31,13 @@ class App:
                     fiis = await loop.run_in_executor(
                         self.crowlerExecutor, self.crowler.get_fiis)
                     self.db.insertFiis(fiis)
-                await asyncio.sleep(SLEEP_INTERVAL)
             except asyncio.CancelledError:
                 print('Crowler task signaled to stop')
                 break
             except Exception as err:
                 print('Exception running crowler task: ' + str(err))
+            finally:
+                await asyncio.sleep(SLEEP_INTERVAL)
 
     async def run(self):
         self.db = DatabaseManager(SQLITE_DBPATH)
