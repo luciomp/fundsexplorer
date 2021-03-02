@@ -58,19 +58,19 @@ class DatabaseManager:
                 select MAX(CODIGOEXEC) FROM {Fii.__tablename__})'''
         )]
 
-    def insertFavorite(self, deviceid, fii):
-        cur = self.conn.cursor()
-        cur.execute(f"insert into FAVORITE (DEVICEID, CODIGODOFUNDO) values ('{deviceid}', '{fii}')")
-        self.conn.commit()
+    # def insertFavorite(self, deviceid, fii):
+    #     cur = self.conn.cursor()
+    #     cur.execute(f"insert into FAVORITE (DEVICEID, CODIGODOFUNDO) values ('{deviceid}', '{fii}')")
+    #     self.conn.commit()
 
-    def deleteFavorite(self, deviceid, fii):
-        cur = self.conn.cursor()
-        cur.execute(f"delete from FAVORITE where DEVICEID='{deviceid}' and CODIGODOFUNDO='{fii}'")
-        self.conn.commit()
+    # def deleteFavorite(self, deviceid, fii):
+    #     cur = self.conn.cursor()
+    #     cur.execute(f"delete from FAVORITE where DEVICEID='{deviceid}' and CODIGODOFUNDO='{fii}'")
+    #     self.conn.commit()
 
-    def getFavorites(self, i: dict):
-        cur = self.conn.cursor()
-        return [i for i in cur.execute('select CODIGODOFUNDO from FAVORITE')]
+    # def getFavorites(self, i: dict):
+    #     cur = self.conn.cursor()
+    #     return [i for i in cur.execute('select CODIGODOFUNDO from FAVORITE')]
 
     def getLastExecution(self):
         print('Getting Last Execution')

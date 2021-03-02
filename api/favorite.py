@@ -14,7 +14,9 @@ class FavoriteResource:
         params = request.path.split('/')
         if len(params) != 4:
             raise web.HTTPBadRequest()
-        self.dbmng.insertFavorite(params[2], params[3])
+        f = Favorite({})
+        f.sql_insert()
+        # self.dbmng.insertFavorite(params[2], params[3])
         return web.Response(status=201)
 
     # GET favorite/{deviceid}
