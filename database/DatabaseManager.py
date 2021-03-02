@@ -8,13 +8,14 @@ class DatabaseManager:
     def __init__(self, cstr):
         print('Starting Db Manager')
         self.conn = sqlite3.connect(cstr)
-        self.checkTable()
+        self.run_sql(Fii.sql_create())
+        self.run_sql(Favorite.sql_create())
 
-    def checkTable(self):
+    def run_sql(self, sql):
         cur = self.conn.cursor()
-        cur.execute(Fii.genCreateSQL())
-        cur.execute(Favorite.genCreateSQL())
+        r = [i for i in cur.execute(sql)]
         self.conn.commit()
+        return r
 
     def _cleanFiis(self):
         print('Cleaning Old Fiis')
@@ -58,20 +59,6 @@ class DatabaseManager:
                 select MAX(CODIGOEXEC) FROM {Fii.__tablename__})'''
         )]
 
-    # def insertFavorite(self, deviceid, fii):
-    #     cur = self.conn.cursor()
-    #     cur.execute(f"insert into FAVORITE (DEVICEID, CODIGODOFUNDO) values ('{deviceid}', '{fii}')")
-    #     self.conn.commit()
-
-    # def deleteFavorite(self, deviceid, fii):
-    #     cur = self.conn.cursor()
-    #     cur.execute(f"delete from FAVORITE where DEVICEID='{deviceid}' and CODIGODOFUNDO='{fii}'")
-    #     self.conn.commit()
-
-    # def getFavorites(self, i: dict):
-    #     cur = self.conn.cursor()
-    #     return [i for i in cur.execute('select CODIGODOFUNDO from FAVORITE')]
-
     def getLastExecution(self):
         print('Getting Last Execution')
         cur = self.conn.cursor()
@@ -85,13 +72,3 @@ class DatabaseManager:
         cur = self.conn.cursor()
         cur.execute(f'SELECT distinct(setor) from {Fii.__tablename__}')
         return cur.fetchall()
-
-
-if __name__ == '__main__':
-    def do(*args):
-        pass
-    DatabaseManager.checkTable = do
-    mng = DatabaseManager(r'database/db.sqlite')
-    print(mng.getSetores())
-    # for i in mng.getFiis():
-    #     print(i)

@@ -1,5 +1,6 @@
 from aiohttp import web
-
+from models.Favorite import Favorite
+import sqlite3
 
 class FavoriteResource:
     headers = {
@@ -14,18 +15,26 @@ class FavoriteResource:
         params = request.path.split('/')
         if len(params) != 4:
             raise web.HTTPBadRequest()
-        f = Favorite({})
-        f.sql_insert()
-        # self.dbmng.insertFavorite(params[2], params[3])
-        return web.Response(status=201)
+        f = Favorite({
+            'deviceid': params[2],
+            'codigodofundo': params[3]
+        })
+        try:
+            self.dbmng.run_sql(f.sql_insert())
+            return web.Response(status=201)
+        except sqlite3.IntegrityError:
+            return web.Response(status=422)
 
     # GET favorite/{deviceid}
     def list(self, request):
         params = request.path.split('/')
         if len(params) != 3:
             raise web.HTTPBadRequest()
+        r = self.dbmng.run_sql(Favorite.sql_select({
+            'deviceid': params[2]
+        }))
         return web.json_response({
-            'favorites': self.dbmng.getFavorites(params[2])
+            'favorites': [Favorite(i).atts for i in r]
         })
 
     # DELETE favorito/{deviceid}/{FII}
@@ -33,5 +42,8 @@ class FavoriteResource:
         params = request.path.split('/')
         if len(params) != 4:
             raise web.HTTPBadRequest()
-        self.dbmng.deleteFavorite(params[2], params[3])
+        self.dbmng.run_sql(Favorite.sql_delete({
+            'deviceid': params[2],
+            'codigodofundo': params[3]
+        }))
         return web.Response(status=200)

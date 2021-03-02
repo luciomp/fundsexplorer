@@ -23,9 +23,21 @@ class Model:
             CREATEDAT TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP)'''
 
     @classmethod
-    def sql_select(cls):
+    def sql_select(cls, d = None):
         keys = ','.join(cls.__atts__.keys())
-        return f'SELECT {keys} FROM {cls.tablename()}'
+        r = f'SELECT {keys} FROM {cls.tablename()}'
+        if d:
+            w = " and ".join([f"{k} = '{v}'" for k,v in d.items()])
+            r += f' where {w}'
+        return r
+
+    @classmethod
+    def sql_delete(cls, d = None):
+        r = f'DELETE FROM {cls.tablename()}'
+        if d:
+            w = " and ".join([f"{k} = '{v}'" for k,v in d.items()])
+            r += f' where {w}'
+        return r
 
     def __init__(self, a):
         self.atts = {}

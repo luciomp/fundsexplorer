@@ -38,7 +38,6 @@ class HttpServer:
             raise web.HTTPMethodNotAllowed(httpm, ['OPTIONS'])
 
     async def handle(self, request):
-        print(request)
         params = request.path.split('/')
         if len(params) < 2 or params[1] not in self.resources:
             raise web.HTTPNotFound()
@@ -60,5 +59,4 @@ class HttpServer:
 
         resp = self.call(self.resources[params[1]], request.method, request)
         resp.headers['Access-Control-Allow-Origin'] = '*'
-        print(resp)
         return resp
