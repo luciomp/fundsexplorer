@@ -2,6 +2,7 @@ from aiohttp import web
 from models.Favorite import Favorite
 import sqlite3
 
+
 class FavoriteResource:
     headers = {
         'Access-Control-Allow-Origin': '*'

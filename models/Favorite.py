@@ -1,5 +1,6 @@
 from .model import Model, sqlType
 
+
 class Favorite(Model):
     __atts__ = {
         'deviceid': str,
