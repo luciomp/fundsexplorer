@@ -1,7 +1,7 @@
 import sqlite3
 from datetime import datetime
 from models.Fii import Fii
-from models.Favorite import Favorite
+# from models.Favorite import Favorite
 
 
 class DatabaseManager:
@@ -9,7 +9,7 @@ class DatabaseManager:
         print('Starting Db Manager')
         self.conn = sqlite3.connect(cstr)
         self.run_sql(Fii.sql_create())
-        self.run_sql(Favorite.sql_create())
+        # self.run_sql(Favorite.sql_create())
 
     def run_sql(self, sql):
         cur = self.conn.cursor()

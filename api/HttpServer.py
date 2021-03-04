@@ -1,6 +1,6 @@
 from aiohttp import web
 from .fii import FiiResource
-from .favorite import FavoriteResource
+# from .favorite import FavoriteResource
 
 
 class HttpServer:
@@ -18,8 +18,8 @@ class HttpServer:
         self.runner = None
         self.site = None
         self.resources = {
-            'fii': FiiResource(dbmng),
-            'favorite': FavoriteResource(dbmng)
+            'fii': FiiResource(dbmng)
+            # 'favorite': FavoriteResource(dbmng)
         }
 
     async def run(self, h, p):
